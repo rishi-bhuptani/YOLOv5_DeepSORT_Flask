@@ -233,7 +233,7 @@ def run(
             # Stream results
             #im0 = annotator.result()              #get back annoted image from Annotator class for PIL method , dont use PIL
             if view_img:
-                cv2.imshow(str(p), im0)
+                #cv2.imshow(str(p), im0)
                 cv2.waitKey(1)  # 1 millisecond
 
             # Save results (image with detections)
