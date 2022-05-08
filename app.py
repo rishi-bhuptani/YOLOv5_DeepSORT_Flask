@@ -42,8 +42,9 @@ def return_file():
         # return send_from_directory(loc, obj)
     except Exception as e:
         return str(e)
-    
-app.run()
+
+if __name__ == '__main__':
+    app.run()
 
 # @app.route('/display/<filename>')
 # def display_video(filename):
