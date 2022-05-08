@@ -1,10 +1,13 @@
 from re import DEBUG, sub
 from flask import Flask, render_template, request, redirect, send_file, url_for
+from flask_ngrok import run_with_ngrok
 from werkzeug.utils import secure_filename, send_from_directory
 import os
 import subprocess
 
 app = Flask(__name__)
+run_with_ngrok(app) 
+
 
 uploads_dir = os.path.join(app.instance_path, 'uploads')
 
