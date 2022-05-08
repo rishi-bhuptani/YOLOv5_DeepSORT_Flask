@@ -26,7 +26,8 @@ def detect():
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
     print(video)
     subprocess.run("ls")
-    subprocess.run(['python3', 'detect_track.py', '--source', os.path.join(uploads_dir, secure_filename(video.filename))])
+    # Trash Detection
+    subprocess.run(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--img', '1920', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))])
 
     # return os.path.join(uploads_dir, secure_filename(video.filename))
     obj = secure_filename(video.filename)
