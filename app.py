@@ -24,7 +24,7 @@ def detect():
         return
     video = request.files['video']
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
-    #print(video)
+    print(video)
     #subprocess.run("ls")
     # Trash Detection
     cmd1 = ['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))] #'--img', '1920',
@@ -42,10 +42,10 @@ def detect():
 @app.route('/return-files', methods=['GET'])
 def return_file():
     obj = request.args.get('obj')
-    loc = os.path.join("runs/detect", obj)
+    loc = os.path.join("runs/detect/exp", obj)
     print(loc)
     try:
-        return send_file(os.path.join("runs/detect", obj), attachment_filename=obj)
+        return send_file(os.path.join("runs/detect/exp", obj), attachment_filename=obj)
         # return send_from_directory(loc, obj)
     except Exception as e:
         return str(e)
