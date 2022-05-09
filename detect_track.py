@@ -74,7 +74,7 @@ def run(
         update=False,  # update all models
         project='static',  # save results to project/name
         name='',  # save results to project/name
-        exist_ok=False,  # existing project/name ok, do not increment
+        exist_ok=True,  # existing project/name ok, do not increment
         line_thickness=3,  # bounding box thickness (pixels)
         hide_labels=False,  # hide labels
         hide_conf=False,  # hide confidences
