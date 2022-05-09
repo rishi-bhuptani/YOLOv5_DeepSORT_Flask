@@ -32,8 +32,8 @@ def detect():
     cmd2 = ['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))] #, '--img', '1920'
     commands = [cmd1, cmd2]
     procs = [subprocess.Popen(i) for i in commands ]
-    for p in procs:
-        p.wait()
+    #for p in procs:
+    #    p.wait()
     
     # return os.path.join(uploads_dir, secure_filename(video.filename))
     obj = secure_filename(video.filename)
@@ -42,10 +42,10 @@ def detect():
 @app.route('/return-files', methods=['GET'])
 def return_file():
     obj = request.args.get('obj')
-    loc = os.path.join("runs/detect/exp", obj)
+    loc = os.path.join("runs/detect/exp/", obj)
     print(loc)
     try:
-        return send_file(os.path.join("runs/detect/exp", obj), attachment_filename=obj)
+        return send_file(os.path.join("runs/detect/exp/", obj), attachment_filename=obj)
         # return send_from_directory(loc, obj)
     except Exception as e:
         return str(e)
