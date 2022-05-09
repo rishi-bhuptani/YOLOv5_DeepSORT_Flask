@@ -27,11 +27,9 @@ def detect():
     #print(video)
     #subprocess.run("ls")
     # Trash Detection
-    #subprocess.run(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #'--img', '1920',
+    cmd1 = ['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))] #'--img', '1920',
     # Car & Person Detection
-    #subprocess.run(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #, '--img', '1920'
-    cmd1 = "python detect_track.py --weights /content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt --source os.path.join(uploads_dir, secure_filename(video.filename)) --save-txt"
-    cmd2 = "python detect_track.py --weights /content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt  --source os.path.join(uploads_dir, secure_filename(video.filename)) --save-txt"
+    cmd2 = ['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))] #, '--img', '1920'
     commands = [cmd1, cmd2]
     procs = [subprocess.Popen(i) for i in commands ]
     for p in procs:
