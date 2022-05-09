@@ -23,18 +23,20 @@ def detect():
     if not request.method == "POST":
         return
     video = request.files['video']
+    video.filename = video + '_trash'
+    video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
+    print(video)
+    # Trash Detection
+    subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #'--img', '1920',
+    obj = secure_filename(video.filename)
+    return obj
+    
+    video.filename = video + '_pplcar'
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
     print(video)
     #subprocess.run("ls")
-    # Trash Detection
-    cmd1 = ['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))] #'--img', '1920',
     # Car & Person Detection
-    cmd2 = ['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))] #, '--img', '1920'
-    commands = [cmd1, cmd2]
-    procs = [subprocess.Popen(i) for i in commands ]
-    #for p in procs:
-    #    p.wait()
-    
+    subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #, '--img', '1920'
     # return os.path.join(uploads_dir, secure_filename(video.filename))
     obj = secure_filename(video.filename)
     return obj
@@ -42,10 +44,10 @@ def detect():
 @app.route('/return-files', methods=['GET'])
 def return_file():
     obj = request.args.get('obj')
-    loc = os.path.join("runs/detect/exp/", obj)
+    loc = os.path.join("runs/detect", obj)
     print(loc)
     try:
-        return send_file(os.path.join("runs/detect/exp/", obj), attachment_filename=obj)
+        return send_file(os.path.join("runs/detect", obj), attachment_filename=obj)
         # return send_from_directory(loc, obj)
     except Exception as e:
         return str(e)
