@@ -25,11 +25,11 @@ def detect():
     video = request.files['video']
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
     print(video)
-    subprocess.run("ls")
+    #subprocess.run("ls")
     # Trash Detection
-    subprocess.run(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--img', '1920', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))])
+    subprocess.run(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #'--img', '1920',
     # Car & Person Detection
-    #subprocess.run(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--img', '1920', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))])
+    subprocess.run(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #, '--img', '1920'
     
     # return os.path.join(uploads_dir, secure_filename(video.filename))
     obj = secure_filename(video.filename)
