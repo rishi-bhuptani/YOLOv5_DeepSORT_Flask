@@ -23,23 +23,23 @@ def detect():
     if not request.method == "POST":
         return
     video = request.files['video']
-    video.filename = video + '_trash'
+    video.filename = video.filename[:-4] + '_trash' + video.filename[-4:]
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
     print(video)
     # Trash Detection
     subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #'--img', '1920',
-    obj = secure_filename(video.filename)
-    return obj
+    #obj = secure_filename(video.filename)
+    #return obj
     
-    video.filename = video + '_pplcar'
+    request.files['video'].seek(0)
+    video.filename = video.filename.replace("trash", "pplcar")
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
     print(video)
-    #subprocess.run("ls")
     # Car & Person Detection
     subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #, '--img', '1920'
     # return os.path.join(uploads_dir, secure_filename(video.filename))
-    obj = secure_filename(video.filename)
-    return obj
+    #obj = secure_filename(video.filename)
+    #return obj
 
 @app.route('/return-files', methods=['GET'])
 def return_file():
