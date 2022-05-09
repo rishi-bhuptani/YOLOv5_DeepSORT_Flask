@@ -72,9 +72,9 @@ def run(
         augment=False,  # augmented inference
         visualize=False,  # visualize features
         update=False,  # update all models
-        project='static',  # save results to project/name
-        name='',  # save results to project/name
-        exist_ok=True,  # existing project/name ok, do not increment
+        project=ROOT / 'runs/detect',  # save results to project/name
+        name='exp',  # save results to project/name
+        exist_ok=False,  # existing project/name ok, do not increment
         line_thickness=3,  # bounding box thickness (pixels)
         hide_labels=False,  # hide labels
         hide_conf=False,  # hide confidences
@@ -290,7 +290,7 @@ def parse_opt():
     parser.add_argument('--update', action='store_true', help='update all models')
     parser.add_argument('--project', default=ROOT / 'runs/detect', help='save results to project/name')
     parser.add_argument('--name', default='exp', help='save results to project/name')
-    parser.add_argument('--exist-ok', default=True, action='store_true', help='existing project/name ok, do not increment')
+    parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--line-thickness', default=3, type=int, help='bounding box thickness (pixels)')
     parser.add_argument('--hide-labels', default=False, action='store_true', help='hide labels')
     parser.add_argument('--hide-conf', default=False, action='store_true', help='hide confidences')
