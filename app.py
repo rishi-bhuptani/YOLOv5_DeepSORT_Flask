@@ -28,9 +28,9 @@ def detect():
     print(video)
     # Trash Detection
     subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #'--img', '1920',
-    #obj = secure_filename(video.filename)
-    #return obj
-    
+    obj = secure_filename(video.filename)
+    return obj
+
     request.files['video'].seek(0)
     video.filename = video.filename.replace("trash", "pplcar")
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
@@ -38,8 +38,6 @@ def detect():
     # Car & Person Detection
     subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #, '--img', '1920'
     # return os.path.join(uploads_dir, secure_filename(video.filename))
-    #obj = secure_filename(video.filename)
-    #return obj
 
 @app.route('/return-files', methods=['GET'])
 def return_file():
