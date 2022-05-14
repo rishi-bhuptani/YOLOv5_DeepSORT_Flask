@@ -72,9 +72,9 @@ def run(
         augment=False,  # augmented inference
         visualize=False,  # visualize features
         update=False,  # update all models
-        project='static',  # save results to project/name
-        name='',  # save results to project/name
-        exist_ok=True,  # existing project/name ok, do not increment
+        project=ROOT / 'runs/detect',  # save results to project/name
+        name='exp',  # save results to project/name
+        exist_ok=False,  # existing project/name ok, do not increment
         line_thickness=3,  # bounding box thickness (pixels)
         hide_labels=False,  # hide labels
         hide_conf=False,  # hide confidences
@@ -159,7 +159,9 @@ def run(
 
             p = Path(p)  # to Path
             save_path = str(save_dir / p.name)  # im.jpg
-            txt_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.txt
+            #txt_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.txt
+            txt_file_name = p.parent.name
+            txt_path = str(save_dir / 'labels' / txt_file_name)
             s += '%gx%g ' % im.shape[2:]  # print string
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             imc = im0.copy() if save_crop else im0  # for save_crop
@@ -178,6 +180,7 @@ def run(
                 ##variables for boundig boxes
                 bbox_xywh = []
                 confs = []
+                clss = det[:, 5]
                 ## Adapt detections to deep sort input format
                 for *xyxy, conf, cls in det:
                     x_c, y_c, bbox_w, bbox_h = bbox_rel(*xyxy)
@@ -189,7 +192,7 @@ def run(
                 confss = torch.Tensor(confs)
                 
                 # Pass detections to deepsort
-                outputs = deepsort.update(xywhs, confss, im0)
+                outputs = deepsort.update(xywhs.cpu(), confss.cpu(), clss.cpu(), im0)
                 
                 # draw boxes for visualization
                 if len(outputs) > 0:
@@ -205,21 +208,23 @@ def run(
                         bbox_top = output[1]
                         bbox_w = output[2]
                         bbox_h = output[3]
+                        class_ = int(output[4])
                         identity = output[-1]
-                        with open(txt_path, 'a') as f:
-                            f.write(('%g ' * 10 + '\n') % (frame_idx, identity, bbox_left,
-                                                           bbox_top, bbox_w, bbox_h, -1, -1, -1, -1))  # label format
+                        with open(txt_path + '.txt', 'a') as f:
+                            f.write(f'{frame_idx} {identity} {bbox_left} {bbox_top} {bbox_w} {bbox_h} {class_} {names[class_]}' + '\n')  # label format
                 #close deep sort 
                 
                 annotator = Annotator(im0, line_width=line_thickness, example=str(names))    
                 #yolo write detection result 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
+                    '''
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
                         with open(txt_path + '.txt', 'a') as f:
                             f.write(('%g ' * len(line)).rstrip() % line + '\n')
+                    '''
 
                     if save_img or save_crop or view_img:  # Add bbox to image
                         c = int(cls)  # integer class
@@ -288,9 +293,9 @@ def parse_opt():
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     parser.add_argument('--visualize', action='store_true', help='visualize features')
     parser.add_argument('--update', action='store_true', help='update all models')
-    parser.add_argument('--project', default='static', help='save results to project/name')
-    parser.add_argument('--name', default='', help='save results to project/name')
-    parser.add_argument('--exist-ok', default=True, action='store_true', help='existing project/name ok, do not increment')
+    parser.add_argument('--project', default=ROOT / 'runs/detect', help='save results to project/name')
+    parser.add_argument('--name', default='exp', help='save results to project/name')
+    parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--line-thickness', default=3, type=int, help='bounding box thickness (pixels)')
     parser.add_argument('--hide-labels', default=False, action='store_true', help='hide labels')
     parser.add_argument('--hide-conf', default=False, action='store_true', help='hide confidences')
