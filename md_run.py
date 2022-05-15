@@ -96,6 +96,7 @@ data = pd.concat([pc_data, trash_data], axis = 0)
 data['Centroid_x'] = round(data['BOX_LEFT'] + (data['BOX_W']/2),0)
 data['Centroid_y'] = round(data['BOX_TOP'] - (data['BOX_H']/2),0)
 data['Centroid'] = list(zip(data['Centroid_x'], data['Centroid_y']))
+data.sort_values(by=['FRAME_ID', 'ID'], inplace= True)
 data = [y for x, y in data.groupby('ID', as_index=False)]
 data_clean = [i for i in data if len(i) > 12]
 
