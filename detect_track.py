@@ -73,7 +73,7 @@ def run(
         visualize=False,  # visualize features
         update=False,  # update all models
         project='static',  # save results to project/name
-        name=' ',  # save results to project/name
+        name='',  # save results to project/name
         exist_ok=True,  # existing project/name ok, do not increment
         line_thickness=2,  # bounding box thickness (pixels)
         hide_labels=False,  # hide labels
