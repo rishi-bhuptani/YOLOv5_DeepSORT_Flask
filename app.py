@@ -25,19 +25,22 @@ def detect():
     video = request.files['video']
     video.filename = video.filename[:-4] + '_trash' + video.filename[-4:]
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
-    print(video)
+    #print(video)
     # Trash Detection
-    subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #'--img', '1920',
-    obj = secure_filename(video.filename)
-    return obj
+    subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--name', 'trash', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #'--img', '1920',
 
     request.files['video'].seek(0)
     video.filename = video.filename.replace("trash", "pplcar")
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
     print(video)
     # Car & Person Detection
-    subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #, '--img', '1920'
+    subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--name', 'c&p', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #, '--img', '1920'
     # return os.path.join(uploads_dir, secure_filename(video.filename))
+    
+    # Run md_run
+    subprocess.run(['python3', 'md_run.py', '--trash_file', 'static/trash/labels/uploads.txt', '--people_file', 'static/c&p/labels/uploads.txt', '--save_path', 'static'])
+    obj = secure_filename('static/dumping.csv') # Save dumping output for download
+    return obj
 
 @app.route('/return-files', methods=['GET'])
 def return_file():
