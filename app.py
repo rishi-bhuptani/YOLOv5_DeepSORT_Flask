@@ -27,15 +27,18 @@ def detect():
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
     #print(video)
     # Trash Detection
-    subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--name', 'trash', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #'--img', '1920',
+    result = subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/Trash Detection/weights/best.pt', '--save-txt', '--name', 'trash', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #'--img', '1920',
 
     request.files['video'].seek(0)
     video.filename = video.filename.replace("trash", "pplcar")
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
     print(video)
     # Car & Person Detection
-    subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--name', 'c&p', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #, '--img', '1920'
+    result2 = subprocess.Popen(['python3', 'detect_track.py', '--weights', '/content/gdrive/Shareddrives/DATA 298A/People & Car Detection/weights/best.pt', '--save-txt', '--name', 'c&p', '--source', os.path.join(uploads_dir, secure_filename(video.filename))]) #, '--img', '1920'
     # return os.path.join(uploads_dir, secure_filename(video.filename))
+    
+    std_out, std_err = result.communicate()
+    std_out2, std_err2 = result2.communicate()
     
     # Run md_run
     subprocess.run(['python3', 'md_run.py', '--trash_file', 'static/trash/labels/uploads.txt', '--people_file', 'static/c&p/labels/uploads.txt', '--save_path', 'static'])
