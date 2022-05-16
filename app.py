@@ -42,7 +42,7 @@ def detect():
     
     # Run md_run
     subprocess.run(['python3', 'md_run.py', '--trash_file', 'static/trash/labels/uploads.txt', '--people_file', 'static/c&p/labels/uploads.txt', '--save_path', 'static'])
-    obj = secure_filename('static/dumping.csv') # Save dumping output for download
+    obj = secure_filename('dumping.csv') # Save dumping output for download
     return obj
 
 @app.route('/return-files', methods=['GET'])
